@@ -132,10 +132,15 @@ public class Ads : BasePlugin
     private void PrintWrappedLine(HudDestination? destination, string message,
         CCSPlayerController? connectPlayer = null, bool isWelcome = false)
     {
-        if (connectPlayer != null && !connectPlayer.IsBot && isWelcome)
+        if (connectPlayer != null && !connectPlayer.IsBot && connectPlayer.IsValid && isWelcome)
         {
             AddTimer(Config.WelcomeMessage?.DisplayDelay ?? 2, () =>
             {
+                if (connectPlayer == null || !connectPlayer.IsValid)
+                {
+                    return;
+                }
+                
                 var processedMessage = ProcessMessage(message, connectPlayer.SteamID)
                     .Replace("{PLAYERNAME}", connectPlayer.PlayerName);
 
